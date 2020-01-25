@@ -8,7 +8,7 @@ class Layout extends Component {
   render() {
     return (
       <Aux>
-        <NavigationBar isAuth={this.props.isAuthenticated} />
+        <NavigationBar isAuth={this.props.isAuthenticated} isAdmin={this.props.isAdmin} />
         <main className={classes.Content}>
           {this.props.children}
         </main>
@@ -19,7 +19,8 @@ class Layout extends Component {
 
 const mapStateToProps = state => {
   return {
-    isAuthenticated: state.auth.token !== null
+    isAuthenticated: state.auth.token !== null,
+    isAdmin: state.auth.admin
   }
 }
 

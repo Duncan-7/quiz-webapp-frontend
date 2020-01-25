@@ -7,11 +7,12 @@ export const authStart = () => {
   };
 };
 
-export const authSuccess = (token, userId) => {
+export const authSuccess = (token, userId, admin) => {
   return {
     type: actionTypes.AUTH_SUCCESS,
     idToken: token,
-    userId: userId
+    userId: userId,
+    admin: admin
   };
 };
 
@@ -32,6 +33,7 @@ export const logout = () => {
   };
 };
 
+//set timer to logout when token expires
 export const checkAuthTimeout = (expirationTime) => {
   return dispatch => {
     setTimeout(() => {
@@ -60,16 +62,19 @@ export const auth = (email, password, isSignUp) => {
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('expirationDate', expirationDate);
         localStorage.setItem('userId', response.data.userId);
-        dispatch(authSuccess(response.data.token, response.data.userId));
+        localStorage.setItem('admin', response.data.admin);
+        dispatch(authSuccess(response.data.token, response.data.userId, response.data.admin));
         dispatch(checkAuthTimeout(response.data.expiresIn));
       })
       .catch(err => {
         console.log(err);
+        console.log(err.response.data.error);
         dispatch(authFail(err.response.data.error));
       });
   };
 };
 
+//check for presence of unexpired token in localStorage on starting App
 export const authCheckState = () => {
   return dispatch => {
     const token = localStorage.getItem('token');
@@ -81,8 +86,10 @@ export const authCheckState = () => {
         dispatch(logout());
       } else {
         const userId = localStorage.getItem('userId');
-
-        dispatch(authSuccess(token, userId));
+        let admin = localStorage.getItem('admin');
+        //convert admin back to boolean
+        admin = admin === 'true' ? true : false;
+        dispatch(authSuccess(token, userId, admin));
         dispatch(checkAuthTimeout((expirationDate.getTime() - new Date().getTime()) / 1000));
       }
     }

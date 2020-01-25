@@ -7,6 +7,7 @@ const NavigationBar = (props) => {
     <div className={classes.NavBar}>
       <ul className={classes.NavLinks}>
         <NavigationLink link="/" exact>Home</NavigationLink>
+        {props.isAdmin ? <NavigationLink link="/create-quiz">Create New Quiz</NavigationLink> : null}
         {props.isAuth
           ? <NavigationLink link="/logout">Logout</NavigationLink>
           : <NavigationLink link="/auth">Login/Signup</NavigationLink>

@@ -6,6 +6,8 @@ import * as actions from './store/actions/index';
 import Layout from './hoc/Layout/Layout';
 import Auth from './containers/Auth/Auth';
 import Logout from './containers/Auth/Logout/Logout';
+import Home from './components/Home/Home';
+import CreateQuiz from './containers/CreateQuiz/CreateQuiz';
 import './App.css';
 
 
@@ -26,7 +28,8 @@ class App extends Component {
       routes = (
         <Switch>
           <Route path="/logout" component={Logout} />
-          <Route path="/" exact render={() => <p>{this.props.isAuthenticated ? "logged in" : null}</p>} />
+          <Route path="/create-quiz" component={CreateQuiz} />
+          <Route path="/" exact component={Home} />
           <Redirect to="/" />
         </Switch>
       )
@@ -34,7 +37,9 @@ class App extends Component {
 
     return (
       <Layout>
-        {routes}
+        <div className="App">
+          {routes}
+        </div>
       </Layout>
     );
   }
