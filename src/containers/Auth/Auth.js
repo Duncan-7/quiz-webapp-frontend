@@ -130,7 +130,6 @@ class Auth extends Component {
         <p>{this.props.error}</p>
       );
     }
-    console.log(errorMessage)
 
     let authRedirect = null;
     if (this.props.isAuthenticated) {

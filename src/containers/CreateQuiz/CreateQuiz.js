@@ -16,6 +16,7 @@ class CreateQuiz extends Component {
         elementType: 'input',
         elementConfig: {
           type: 'text',
+          name: 'title',
           placeholder: 'Quiz Title'
         },
         value: '',
@@ -30,6 +31,7 @@ class CreateQuiz extends Component {
         elementType: 'input',
         elementConfig: {
           type: 'date',
+          name: 'date',
           placeholder: ''
         },
         value: '',
@@ -43,6 +45,7 @@ class CreateQuiz extends Component {
         label: 'Live',
         elementType: 'select',
         elementConfig: {
+          name: 'title',
           options: [
             { value: true, displayValue: 'Yes' },
             { value: false, displayValue: 'No' }
@@ -195,22 +198,81 @@ class CreateQuiz extends Component {
     return isValid;
   }
 
-  inputChangedHandler = (event, controlName) => {
-    // const updatedControls = {
-    //   ...this.state.controls,
-    //   [controlName]: {
-    //     ...this.state.controls[controlName],
-    //     value: event.target.value,
-    //     valid: this.checkValidity(event.target.value, this.state.controls[controlName].validation),
-    //     touched: true,
-    //   }
-    // };
-    // this.setState({ controls: updatedControls });
+  inputChangedHandler = (event, section, field, questionIndex, answerIndex) => {
+    switch (section) {
+      case 'informationFields':
+        const updatedInformationFields = {
+          ...this.state.informationFields,
+          [field]: {
+            ...this.state.informationFields[field],
+            value: event.target.value,
+            valid: this.checkValidity(event.target.value, this.state.informationFields[field].validation),
+            touched: true
+          }
+        }
+        this.setState({ informationFields: updatedInformationFields });
+        break;
+      case 'questions':
+        const updatedQuestions = [
+          ...this.state.questions
+        ];
+        updatedQuestions[questionIndex] = {
+          ...updatedQuestions[questionIndex],
+          questionText: {
+            ...updatedQuestions[questionIndex].questionText,
+            value: event.target.value,
+            valid: this.checkValidity(event.target.value, this.state.questions[questionIndex].questionText.validation),
+            touched: true
+          }
+        };
+        this.setState({ questions: updatedQuestions });
+        break;
+      case 'answers':
+        const updatedAnswers = [
+          ...this.state.questions[questionIndex].answerOptions
+        ];
+        updatedAnswers[answerIndex].answerOption = {
+          ...updatedAnswers[answerIndex].answerOption,
+          value: event.target.value,
+          valid: this.checkValidity(event.target.value, this.state.questions[questionIndex].answerOptions[answerIndex].answerOption.validation),
+          touched: true
+        }
+        const questions = [
+          ...this.state.questions,
+        ];
+        questions[questionIndex] = {
+          ...questions[questionIndex],
+          answerOptions: updatedAnswers
+        };
+        this.setState({ questions: questions });
+        break;
+      default:
+        break;
+    };
   }
 
   submitHandler = (event) => {
     event.preventDefault();
-    this.props.onAuth(this.state.controls.email.value, this.state.controls.password.value, this.state.isSignUp);
+    //create an object with the data in the correct format to be received by the backend, and dispatch it
+    const formData = {};
+    for (let formField in this.state.informationFields) {
+      formData[formField] = this.state.informationFields[formField].value
+    };
+    const questions = this.state.questions.map(question => (
+      {
+        question: question.questionText.value,
+        answerIndex: null,
+        answerOptions: question.answerOptions.map(answer => (
+          answer.answerOption.value
+        )
+        )
+      }
+    ));
+    formData['questions'] = questions;
+    formData['userId'] = this.props.userId;
+    console.log(formData)
+
+    this.props.onCreateTemplate(formData);
   }
 
   addQuestion = (event) => {
@@ -337,7 +399,7 @@ class CreateQuiz extends Component {
         invalid={!formElement.config.valid}
         shouldValidate={formElement.config.validation}
         touched={formElement.config.touched}
-        changed={(event) => this.inputChangedHandler(event, formElement.id)} />
+        changed={(event) => this.inputChangedHandler(event, 'informationFields', formElement.id)} />
     ));
 
     //generate input fields for questions and answers
@@ -352,7 +414,7 @@ class CreateQuiz extends Component {
           invalid={!question.questionText.valid}
           shouldValidate={question.questionText.validation}
           touched={question.questionText.touched}
-          changed={(event) => this.inputChangedHandler(event, index)} />
+          changed={(event) => this.inputChangedHandler(event, 'questions', null, index)} />
 
         {question.answerOptions.map((answer, ind) => {
           return <Input
@@ -364,7 +426,7 @@ class CreateQuiz extends Component {
             invalid={!answer.valid}
             shouldValidate={answer.validation}
             touched={answer.touched}
-            changed={(event) => this.inputChangedHandler(event, index, ind)} />
+            changed={(event) => this.inputChangedHandler(event, 'answers', null, index, ind)} />
         })}
 
         <Button
@@ -424,15 +486,16 @@ class CreateQuiz extends Component {
 
 const mapStateToProps = state => {
   return {
-    loading: state.auth.loading,
-    error: state.auth.error,
-    isAuthenticated: state.auth.token !== null,
+    loading: state.template.loading,
+    error: state.template.error,
+    token: state.auth.token,
+    userId: state.auth.userId
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    onAuth: (email, password, isSignUp) => dispatch(actions.auth(email, password, isSignUp))
+    onCreateTemplate: (formData) => dispatch(actions.createTemplate(formData))
   }
 }
 

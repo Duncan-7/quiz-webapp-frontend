@@ -1,5 +1,5 @@
 import * as actionTypes from './actionTypes';
-import axios from 'axios';
+import axios from '../../axios-instance';
 
 export const authStart = () => {
   return {
@@ -49,10 +49,10 @@ export const auth = (email, password, isSignUp) => {
       email: email,
       password: password
     }
-    let url = 'http://localhost:3000/users/signup';
+    let url = 'users/signup';
 
     if (!isSignUp) {
-      url = 'http://localhost:3000/users/login';
+      url = 'users/login';
     }
 
     axios.post(url, authData)
