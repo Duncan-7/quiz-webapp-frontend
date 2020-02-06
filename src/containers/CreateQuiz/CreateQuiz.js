@@ -167,6 +167,10 @@ class CreateQuiz extends Component {
     ]
   }
 
+  componentDidMount() {
+    this.props.onCreateTemplateInit();
+  }
+
   checkValidity(value, rules) {
     let isValid = true;
     if (!rules) {
@@ -270,7 +274,6 @@ class CreateQuiz extends Component {
     ));
     formData['questions'] = questions;
     formData['userId'] = this.props.userId;
-    console.log(formData)
 
     this.props.onCreateTemplate(formData);
   }
@@ -471,14 +474,25 @@ class CreateQuiz extends Component {
       );
     }
 
+    //set up redirect path
+    let redirectPath = this.props.admin ? null : <Redirect to="/" />;
+
+    //replace body with success message if template created
+    let content = < form onSubmit={this.submitHandler} >
+      {informationFields}
+      {questionFields}
+      < Button btnType="Success">Create Quiz</Button >
+    </form >
+
+    if (this.props.created) {
+      content = <p>Template created!</p>
+    }
+
     return (
-      < div className={classes.Auth} >
+      < div className={classes.Container} >
+        {redirectPath}
         {errorMessage}
-        < form onSubmit={this.submitHandler} >
-          {informationFields}
-          {questionFields}
-          < Button btnType="Success">Create Quiz</Button >
-        </form >
+        {content}
       </div >
     );
   }
@@ -488,14 +502,16 @@ const mapStateToProps = state => {
   return {
     loading: state.template.loading,
     error: state.template.error,
-    token: state.auth.token,
-    userId: state.auth.userId
+    created: state.template.created,
+    userId: state.auth.userId,
+    admin: state.auth.admin
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    onCreateTemplate: (formData) => dispatch(actions.createTemplate(formData))
+    onCreateTemplate: (formData) => dispatch(actions.createTemplate(formData)),
+    onCreateTemplateInit: () => dispatch(actions.createTemplateInit())
   }
 }
 

@@ -11,12 +11,14 @@ import thunk from 'redux-thunk';
 
 import authReducer from './store/reducers/auth';
 import templateReducer from './store/reducers/template';
+import responseReducer from './store/reducers/response';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const rootReducer = combineReducers({
   auth: authReducer,
-  template: templateReducer
+  template: templateReducer,
+  response: responseReducer
 });
 
 const store = createStore(rootReducer, composeEnhancers(

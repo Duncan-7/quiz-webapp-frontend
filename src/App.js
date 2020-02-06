@@ -8,6 +8,9 @@ import Auth from './containers/Auth/Auth';
 import Logout from './containers/Auth/Logout/Logout';
 import Home from './components/Home/Home';
 import CreateQuiz from './containers/CreateQuiz/CreateQuiz';
+import SelectQuiz from './containers/SelectQuiz/SelectQuiz';
+import CreateQuizResponse from './containers/CreateQuizResponse/CreateQuizResponse';
+import ViewTickets from './containers/ViewTickets/ViewTickets';
 import './App.css';
 
 
@@ -29,6 +32,9 @@ class App extends Component {
         <Switch>
           <Route path="/logout" component={Logout} />
           <Route path="/create-quiz" component={CreateQuiz} />
+          <Route path="/select-quiz/:id" component={CreateQuizResponse} />
+          <Route path="/select-quiz" component={SelectQuiz} />
+          <Route path="/view-tickets" component={ViewTickets} />
           <Route path="/" exact component={Home} />
           <Redirect to="/" />
         </Switch>

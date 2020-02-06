@@ -42,3 +42,37 @@ export const createTemplate = (templateData) => {
       })
   };
 };
+
+export const fetchTemplatesStart = () => {
+  return {
+    type: actionTypes.FETCH_TEMPLATES_START
+  };
+};
+
+export const fetchTemplatesSuccess = templates => {
+  return {
+    type: actionTypes.FETCH_TEMPLATES_SUCCESS,
+    templates: templates
+  };
+};
+
+export const fetchTemplatesFail = error => {
+  return {
+    type: actionTypes.FETCH_TEMPLATES_FAIL,
+    error: error
+  };
+};
+
+export const fetchTemplates = (isAdmin) => {
+  return dispatch => {
+    dispatch(fetchTemplatesStart());
+    const url = isAdmin ? '/quiztemplates' : '/quiztemplates/live';
+    axios.get(url)
+      .then(response => {
+        dispatch(fetchTemplatesSuccess(response.data.quizTemplates));
+      })
+      .catch(error => {
+        dispatch(fetchTemplatesFail(error.response.data.error));
+      })
+  }
+}

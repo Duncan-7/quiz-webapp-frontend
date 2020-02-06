@@ -1,0 +1,20 @@
+.Answer {
+  border: 1px solid black;
+  border-radius: 5px;
+  margin-bottom: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.Answer:hover {
+  background-color: #4BB3FD;
+}
+
+.Selected {
+  background-color: #027BCE;
+  color: white;
+}
+
+.PointerDisabled {
+  pointer-events: none;
+}

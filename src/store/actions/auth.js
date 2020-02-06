@@ -1,4 +1,5 @@
 import * as actionTypes from './actionTypes';
+import * as actions from './index';
 import axios from '../../axios-instance';
 
 export const authStart = () => {
@@ -65,6 +66,9 @@ export const auth = (email, password, isSignUp) => {
         localStorage.setItem('admin', response.data.admin);
         dispatch(authSuccess(response.data.token, response.data.userId, response.data.admin));
         dispatch(checkAuthTimeout(response.data.expiresIn));
+        //preload templates redux store
+        dispatch(actions.fetchTemplates(response.data.admin));
+        dispatch(actions.fetchResponses(response.data.userId));
       })
       .catch(err => {
         console.log(err);
@@ -91,6 +95,9 @@ export const authCheckState = () => {
         admin = admin === 'true' ? true : false;
         dispatch(authSuccess(token, userId, admin));
         dispatch(checkAuthTimeout((expirationDate.getTime() - new Date().getTime()) / 1000));
+        //preload templates redux store
+        dispatch(actions.fetchTemplates(admin));
+        dispatch(actions.fetchResponses(userId));
       }
     }
   }
