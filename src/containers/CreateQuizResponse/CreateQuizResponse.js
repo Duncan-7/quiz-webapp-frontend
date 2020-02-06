@@ -48,7 +48,7 @@ class CreateQuizResponse extends Component {
     const updatedAnswers = [...this.state.answers];
     updatedAnswers.push(answerIndex);
     //check if all questions have been answered
-    const quizComplete = this.state.template.questions.length === updatedAnswers.length ? true : false;
+    const quizComplete = this.state.template.questions.length === updatedAnswers.length;
     this.setState({
       answeringQuestion: false,
       answers: updatedAnswers,
@@ -108,7 +108,7 @@ class CreateQuizResponse extends Component {
       <Button key="1" btnType="Danger" clicked={this.reset} >Reset</Button>];
     }
 
-    if(this.props.submitted) {
+    if (this.props.submitted) {
       content = <p>Answers submitted!</p>
       controls = null;
     }

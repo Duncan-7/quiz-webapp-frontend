@@ -5,14 +5,21 @@ import classes from './SelectQuiz.module.css';
 import TemplatePreview from '../../components/TemplatePreview/TemplatePreview';
 
 class SelectQuiz extends Component {
-  onSelectQuiz = () => {
-
-  }
-
   render() {
-    const liveTemplates = this.props.quizTemplates.filter(template => {
+    //remove templates taht aren't live
+    let liveTemplates = this.props.quizTemplates.filter(template => {
       return template.live;
     })
+    //remove templates the user already entered
+    liveTemplates = liveTemplates.filter(template => {
+      let notYetEntered = true;
+      this.props.quizResponses.forEach(response => {
+        if (response.template === template._id) {
+          notYetEntered = false;
+        }
+      });
+      return notYetEntered;
+    });
 
     const templatesList = liveTemplates.map(template => {
       return <TemplatePreview
@@ -31,7 +38,8 @@ class SelectQuiz extends Component {
 
 const mapStateToProps = state => {
   return {
-    quizTemplates: state.template.templates
+    quizTemplates: state.template.templates,
+    quizResponses: state.response.responses
   }
 }
 

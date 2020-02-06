@@ -40,3 +40,8 @@
     transform: rotate(360deg);
   }
 }
+
+.no-text-decoration {
+  text-decoration: none;
+  color: black;
+}

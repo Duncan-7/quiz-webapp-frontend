@@ -33,8 +33,7 @@ export const createResponse = (responseData) => {
     dispatch(createResponseStart());
     axios.post('/quizresponses', responseData)
       .then(response => {
-        console.log(response.data);
-        dispatch(createResponseSuccess(response.data))
+        dispatch(createResponseSuccess(response.data.quizResponse))
       })
       .catch(error => {
         dispatch(createResponseFail(error.response.data.error))

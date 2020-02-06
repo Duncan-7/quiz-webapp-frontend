@@ -8,11 +8,11 @@ import * as actions from '../../store/actions/index';
 
 class ViewTickets extends Component {
   render() {
-    console.log(this.props.responses)
     const tickets = this.props.responses.map(response => {
       const template = this.props.templates.find(template => response.template === template._id);
       return <TicketStub
         key={response._id}
+        id={response._id}
         title={template.title}
         score={response.score} />
     });
@@ -21,9 +21,9 @@ class ViewTickets extends Component {
     const pendingTickets = tickets.filter(ticket => ticket.props.score === null);
 
     return <div>
-      <h2>Results Available</h2>
+      <h3>Results Available</h3>
       {settledTickets}
-      <h2>Tickets Pending</h2>
+      <h3>Tickets Pending</h3>
       {pendingTickets}
     </div>
   }

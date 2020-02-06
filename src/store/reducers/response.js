@@ -21,7 +21,7 @@ const reducer = (state = initialState, action) => {
         created: true,
         loading: false,
         error: null,
-        templates: state.responses.concat(action.response)
+        responses: state.responses.concat(action.response)
       });
     case actionTypes.FETCH_RESPONSES_START:
       return updateObject(state, { loading: true });

@@ -11,6 +11,7 @@ import CreateQuiz from './containers/CreateQuiz/CreateQuiz';
 import SelectQuiz from './containers/SelectQuiz/SelectQuiz';
 import CreateQuizResponse from './containers/CreateQuizResponse/CreateQuizResponse';
 import ViewTickets from './containers/ViewTickets/ViewTickets';
+import TicketSummary from './containers/TicketSummary/TicketSummary';
 import './App.css';
 
 
@@ -34,6 +35,7 @@ class App extends Component {
           <Route path="/create-quiz" component={CreateQuiz} />
           <Route path="/select-quiz/:id" component={CreateQuizResponse} />
           <Route path="/select-quiz" component={SelectQuiz} />
+          <Route path="/view-tickets/:id" component={TicketSummary} />
           <Route path="/view-tickets" component={ViewTickets} />
           <Route path="/" exact component={Home} />
           <Redirect to="/" />

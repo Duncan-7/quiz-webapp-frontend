@@ -18,3 +18,11 @@
 .PointerDisabled {
   pointer-events: none;
 }
+
+.Correct {
+  border: 2px solid green;
+}
+
+.Incorrect {
+  border: 2px solid red;
+}

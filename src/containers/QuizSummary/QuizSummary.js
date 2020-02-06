@@ -12,7 +12,8 @@ class QuizSummary extends Component {
         questionNumber={index + 1}
         questionText={question.question}
         answerOptions={question.answerOptions}
-        selectedAnswer={this.props.answers[index]} />
+        selectedAnswer={this.props.answers[index]}
+        answerIndex={question.answerIndex} />
     })
     return (
       <div>
