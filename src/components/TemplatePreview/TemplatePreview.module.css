@@ -4,3 +4,15 @@
   margin-bottom: 10px;
   border-radius: 5px;
 }
+
+.live {
+  font-weight: bold;
+  color: green;
+  float: right;
+}
+
+.notLive {
+  font-weight: bold;
+  color: red;
+  float: right;
+}

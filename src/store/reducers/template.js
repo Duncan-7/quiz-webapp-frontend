@@ -23,6 +23,17 @@ const reducer = (state = initialState, action) => {
         error: null,
         templates: state.templates.concat(action.template)
       });
+    case actionTypes.UPDATE_TEMPLATE_FAIL:
+      return updateObject(state, { error: action.error });
+    case actionTypes.UPDATE_TEMPLATE_SUCCESS:
+      const oldTemplateIndex = state.templates.findIndex(template => template._id === action.updatedTemplate._id);
+      const updatedTemplateArray = [...state.templates];
+      updatedTemplateArray[oldTemplateIndex] = action.updatedTemplate;
+      return updateObject(state, {
+        error: null,
+        templates: updatedTemplateArray,
+        created: true
+      });
     case actionTypes.FETCH_TEMPLATES_START:
       return updateObject(state, { loading: true });
     case actionTypes.FETCH_TEMPLATES_FAIL:

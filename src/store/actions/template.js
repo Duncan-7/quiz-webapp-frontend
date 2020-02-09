@@ -1,5 +1,7 @@
 import * as actionTypes from './actionTypes';
 import axios from '../../axios-instance';
+import * as actions from './index';
+import { fetchResponses } from './response';
 
 export const createTemplateStart = () => {
   return {
@@ -33,12 +35,39 @@ export const createTemplate = (templateData) => {
     dispatch(createTemplateStart());
     axios.post('/quiztemplates', templateData)
       .then(response => {
-        console.log(response.data);
-        dispatch(createTemplateSuccess(response.data))
+        dispatch(createTemplateSuccess(response.data.quizTemplate))
       })
       .catch(error => {
-        console.log(error.response)
         dispatch(createTemplateFail(error.response.data.error))
+      })
+  };
+};
+
+export const updateTemplateSuccess = (templateData) => {
+  return {
+    type: actionTypes.UPDATE_TEMPLATE_SUCCESS,
+    updatedTemplate: templateData
+  };
+};
+
+export const updateTemplateFail = (error) => {
+  return {
+    type: actionTypes.UPDATE_TEMPLATE_FAIL,
+    error: error
+  };
+};
+
+export const updateTemplate = (templateId, templateData) => {
+  return dispatch => {
+    dispatch(createTemplateStart());
+    axios.put('/quiztemplates/' + templateId, templateData)
+      .then(response => {
+        dispatch(updateTemplateSuccess(response.data.quizTemplate))
+        //fetch updated (possible scored) responses
+        dispatch(fetchResponses(templateData.userId));
+      })
+      .catch(error => {
+        dispatch(updateTemplateFail(error.response.data.error))
       })
   };
 };

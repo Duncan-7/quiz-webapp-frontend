@@ -6,20 +6,26 @@ import TemplatePreview from '../../components/TemplatePreview/TemplatePreview';
 
 class SelectQuiz extends Component {
   render() {
-    //remove templates taht aren't live
+    //remove templates that have already been scored
     let liveTemplates = this.props.quizTemplates.filter(template => {
-      return template.live;
+      return !template.results;
     })
-    //remove templates the user already entered
-    liveTemplates = liveTemplates.filter(template => {
-      let notYetEntered = true;
-      this.props.quizResponses.forEach(response => {
-        if (response.template === template._id) {
-          notYetEntered = false;
-        }
+    //remove templates that are not live or that the user already entered if user is not an admin
+    if (!this.props.isAdmin) {
+      liveTemplates = this.props.quizTemplates.filter(template => {
+        return template.live;
+      })
+      liveTemplates = liveTemplates.filter(template => {
+        let notYetEntered = true;
+        this.props.quizResponses.forEach(response => {
+          if (response.template === template._id) {
+            notYetEntered = false;
+          }
+        });
+        return notYetEntered;
       });
-      return notYetEntered;
-    });
+    }
+
 
     const templatesList = liveTemplates.map(template => {
       return <TemplatePreview
@@ -27,7 +33,8 @@ class SelectQuiz extends Component {
         id={template._id}
         title={template.title}
         date={template.closingDate}
-        numberOfQuestions={template.questions.length} />
+        numberOfQuestions={template.questions.length}
+        live={template.live} />
     })
 
     return <div>
@@ -39,7 +46,8 @@ class SelectQuiz extends Component {
 const mapStateToProps = state => {
   return {
     quizTemplates: state.template.templates,
-    quizResponses: state.response.responses
+    quizResponses: state.response.responses,
+    isAdmin: state.auth.admin
   }
 }
 

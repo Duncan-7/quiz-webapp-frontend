@@ -11,6 +11,7 @@ const TemplatePreview = props => {
     <Link to={'/select-quiz/' + props.id}>
       <Button btnType="Success">Enter Quiz</Button>
     </Link>
+    {props.live ? <p className={classes.live}>LIVE</p> : <p className={classes.notLive}>NOT LIVE</p>}
   </div>
 }
 

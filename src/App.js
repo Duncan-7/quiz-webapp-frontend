@@ -12,6 +12,7 @@ import SelectQuiz from './containers/SelectQuiz/SelectQuiz';
 import CreateQuizResponse from './containers/CreateQuizResponse/CreateQuizResponse';
 import ViewTickets from './containers/ViewTickets/ViewTickets';
 import TicketSummary from './containers/TicketSummary/TicketSummary';
+import UserProfile from './containers/UserProfile/UserProfile';
 import './App.css';
 
 
@@ -37,6 +38,7 @@ class App extends Component {
           <Route path="/select-quiz" component={SelectQuiz} />
           <Route path="/view-tickets/:id" component={TicketSummary} />
           <Route path="/view-tickets" component={ViewTickets} />
+          <Route path="/user-profile" component={UserProfile} />
           <Route path="/" exact component={Home} />
           <Redirect to="/" />
         </Switch>

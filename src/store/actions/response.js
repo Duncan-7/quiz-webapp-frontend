@@ -11,7 +11,6 @@ export const createResponseSuccess = (responseData) => {
   return {
     type: actionTypes.CREATE_RESPONSE_SUCCESS,
     response: responseData
-
   };
 };
 
@@ -33,13 +32,39 @@ export const createResponse = (responseData) => {
     dispatch(createResponseStart());
     axios.post('/quizresponses', responseData)
       .then(response => {
-        dispatch(createResponseSuccess(response.data.quizResponse))
+        dispatch(createResponseSuccess(response.data.quizResponse));
       })
       .catch(error => {
-        dispatch(createResponseFail(error.response.data.error))
+        dispatch(createResponseFail(error.response.data.error));
       })
   };
 };
+
+export const updateResponseSuccess = (response) => {
+  return {
+    type: actionTypes.UPDATE_RESPONSE_SUCCESS,
+    updatedResponse: response
+  }
+}
+
+export const updateResponseFail = (error) => {
+  return {
+    type: actionTypes.UPDATE_RESPONSE_FAIL,
+    error: error
+  };
+};
+
+export const updateResponse = (responseId, updateData) => {
+  return dispatch => {
+    axios.put('/quizresponses/' + responseId, updateData)
+      .then(response => {
+        dispatch(updateResponseSuccess(response.data.quizResponse));
+      })
+      .catch(error => {
+        dispatch(updateResponseFail(error.response.data.error));
+      })
+  }
+}
 
 export const fetchResponsesStart = () => {
   return {
@@ -67,7 +92,6 @@ export const fetchResponses = (userId) => {
     const url = '/quizresponses';
     axios.get(url + "?id=" + userId)
       .then(response => {
-        console.log(response.data.quizResponses)
         dispatch(fetchResponsesSuccess(response.data.quizResponses));
       })
       .catch(error => {

@@ -15,18 +15,35 @@ class TicketSummary extends Component {
 
   componentDidMount() {
     //use params to find the correct quiz template and response
-    const response = this.props.quizResponses.filter(response => (
+    const response = this.props.quizResponses.find(response => (
       response._id === this.props.match.params.id
-    ))[0];
+    ));
 
-    const template = this.props.quizTemplates.filter(template => (
+    const template = this.props.quizTemplates.find(template => (
       template._id === response.template
-    ))[0];
+    ));
 
     this.setState({
       response: response,
       template: template
     });
+    if (!response.resultsViewed && response.score !== null) {
+      const updateData = { resultsViewed: true };
+      this.props.onUpdateResponse(response._id, updateData);
+    }
+  }
+
+  componentDidUpdate() {
+    //update UI if tickets archive state changes
+    const response = this.props.quizResponses.find(response => (
+      response._id === this.props.match.params.id
+    ));
+
+    if (response.archived !== this.state.response.archived) {
+      this.setState({
+        response: response,
+      });
+    }
   }
 
   render() {
@@ -47,8 +64,12 @@ class TicketSummary extends Component {
           <p>You earned X amount of coins!</p>
           <p>View your answers below, and click archive when you're done.</p>
         </div>
-
-        archive = <Button btnType="Neutral" clicked={() => console.log("archive function")}>Archive</Button>
+        const updateArchiveData = this.state.response.archived ? { archived: false } : { archived: true };
+        archive = <Button
+          btnType="Neutral"
+          clicked={() => this.props.onUpdateResponse(this.state.response._id, updateArchiveData)}>
+          {this.state.response.archived ? "Unarchive" : "Archive"}
+        </Button>
       }
     }
 
@@ -73,7 +94,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-
+    onUpdateResponse: (responseId, updateData) => dispatch(actions.updateResponse(responseId, updateData))
   }
 }
 
