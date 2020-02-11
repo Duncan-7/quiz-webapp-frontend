@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 
 import Question from '../../components/Question/Question';
-import Button from '../../components/UI/Button/Button';
 
 class QuizSummary extends Component {
   render() {

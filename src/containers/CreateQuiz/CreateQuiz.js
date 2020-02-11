@@ -481,7 +481,8 @@ class CreateQuiz extends Component {
     let content = < form onSubmit={this.submitHandler} >
       {informationFields}
       {questionFields}
-      < Button btnType="Success">Create Quiz</Button >
+      <br></br>
+      < Button btnType="Neutral">Create Quiz</Button >
     </form >
 
     if (this.props.created) {

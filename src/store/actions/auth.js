@@ -8,12 +8,13 @@ export const authStart = () => {
   };
 };
 
-export const authSuccess = (token, userId, admin) => {
+export const authSuccess = (token, userId, admin, balance) => {
   return {
     type: actionTypes.AUTH_SUCCESS,
     idToken: token,
     userId: userId,
-    admin: admin
+    admin: admin,
+    balance: balance
   };
 };
 
@@ -23,6 +24,13 @@ export const authFail = (error) => {
     error: error
   };
 };
+
+export const updateBalance = (balance) => {
+  return {
+    type: actionTypes.UPDATE_BALANCE,
+    balance: balance
+  }
+}
 
 export const logout = () => {
   localStorage.removeItem('token');
@@ -58,21 +66,19 @@ export const auth = (email, password, isSignUp) => {
 
     axios.post(url, authData)
       .then(response => {
-        console.log(response);
         const expirationDate = new Date(new Date().getTime() + response.data.expiresIn * 1000);
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('expirationDate', expirationDate);
         localStorage.setItem('userId', response.data.userId);
         localStorage.setItem('admin', response.data.admin);
-        dispatch(authSuccess(response.data.token, response.data.userId, response.data.admin));
+        localStorage.setItem('balance', response.data.balance);
+        dispatch(authSuccess(response.data.token, response.data.userId, response.data.admin, response.data.balance));
         dispatch(checkAuthTimeout(response.data.expiresIn));
         //preload template and response redux stores
         dispatch(actions.fetchTemplates(response.data.admin));
         dispatch(actions.fetchResponses(response.data.userId));
       })
       .catch(err => {
-        console.log(err);
-        console.log(err.response.data.error);
         dispatch(authFail(err.response.data.error));
       });
   };
@@ -91,9 +97,10 @@ export const authCheckState = () => {
       } else {
         const userId = localStorage.getItem('userId');
         let admin = localStorage.getItem('admin');
+        let balance = localStorage.getItem('balance');
         //convert admin back to boolean
         admin = admin === 'true' ? true : false;
-        dispatch(authSuccess(token, userId, admin));
+        dispatch(authSuccess(token, userId, admin, balance));
         dispatch(checkAuthTimeout((expirationDate.getTime() - new Date().getTime()) / 1000));
         //preload templates redux store
         dispatch(actions.fetchTemplates(admin));
@@ -101,4 +108,17 @@ export const authCheckState = () => {
       }
     }
   }
+}
+
+export const getUserData = (userId) => {
+  return dispatch => {
+    axios.get('/users/' + userId)
+      .then(response => {
+        console.log(response.data);
+        dispatch(updateBalance(response.data.balance));
+      })
+      .catch(err => {
+        dispatch(authFail(err.response.data.error));
+      });
+  };
 }

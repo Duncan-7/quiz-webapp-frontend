@@ -26,8 +26,7 @@ class SelectQuiz extends Component {
       });
     }
 
-
-    const templatesList = liveTemplates.map(template => {
+    let templatesList = liveTemplates.map(template => {
       return <TemplatePreview
         key={template._id}
         id={template._id}
@@ -36,6 +35,12 @@ class SelectQuiz extends Component {
         numberOfQuestions={template.questions.length}
         live={template.live} />
     })
+
+    console.log(templatesList)
+
+    if (templatesList.length === 0) {
+      templatesList = <p>You've entered all our quizzes! Check back later for more.</p>
+    }
 
     return <div>
       {templatesList}

@@ -1,6 +1,5 @@
 import * as actionTypes from './actionTypes';
 import axios from '../../axios-instance';
-import * as actions from './index';
 import { fetchResponses } from './response';
 
 export const createTemplateStart = () => {

@@ -6,7 +6,8 @@ const initialState = {
   userId: null,
   admin: false,
   error: null,
-  loading: false
+  loading: false,
+  balance: null
 }
 
 const authStart = (state, action) => {
@@ -18,6 +19,7 @@ const authSuccess = (state, action) => {
     token: action.idToken,
     userId: action.userId,
     admin: action.admin,
+    balance: action.balance,
     error: null,
     loading: false
   });
@@ -34,6 +36,10 @@ const authLogout = (state, action) => {
   });
 }
 
+const updateBalance = (state, action) => {
+  return updateObject(state, { balance: action.balance });
+}
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.AUTH_START:
@@ -44,6 +50,8 @@ const reducer = (state = initialState, action) => {
       return authFail(state, action);
     case actionTypes.AUTH_LOGOUT:
       return authLogout(state, action);
+    case actionTypes.UPDATE_BALANCE:
+      return updateBalance(state, action);
     default:
       return state
   }

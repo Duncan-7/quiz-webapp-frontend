@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import QuizSummary from '../QuizSummary/QuizSummary';
 import TicketStub from '../../components/TicketStub/TicketStub';
 import Aux from '../../hoc/Aux/Aux';
 import Button from '../../components/UI/Button/Button';
-import * as actions from '../../store/actions/index';
-// import classes from './ViewTickets.module.css';
 
 class ViewTickets extends Component {
   state = {
@@ -28,20 +25,24 @@ class ViewTickets extends Component {
         title={template.title}
         score={response.score}
         resultsViewed={response.resultsViewed}
-        archived={response.archived} />
+        archived={response.archived}
+        quizLength={template.questions.length} />
     });
 
     //sort tickets into correct categories
-    const archivedTickets = [];
-    const settledTickets = [];
-    const pendingTickets = [];
+    let archivedTickets = <p>No tickets archived</p>;
+    let pendingTickets = <p>No tickets pending. Go select a quiz to enter!</p>;
+    let settledTickets = <p>No results to view, check back later.</p>;
 
     tickets.forEach(ticket => {
       if (ticket.props.archived) {
+        archivedTickets = [];
         archivedTickets.push(ticket);
       } else if (ticket.props.score === null) {
+        pendingTickets = [];
         pendingTickets.push(ticket);
       } else {
+        settledTickets = [];
         settledTickets.push(ticket);
       }
     })
@@ -62,6 +63,8 @@ class ViewTickets extends Component {
       <Button btnType="Neutral" clicked={this.toggleShowArchived}>
         {this.state.showArchived ? "Hide" : "Show"} Archived Tickets
       </Button>
+      <br />
+      <br />
       {archived}
     </div>
   }
@@ -74,10 +77,4 @@ const mapStateToProps = state => {
   }
 }
 
-const mapDispatchToProps = dispatch => {
-  return {
-
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(ViewTickets);
+export default connect(mapStateToProps)(ViewTickets);

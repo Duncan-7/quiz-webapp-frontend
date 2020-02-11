@@ -1,4 +1,5 @@
 import * as actionTypes from './actionTypes';
+import * as actions from './index';
 import axios from '../../axios-instance';
 
 export const createResponseStart = () => {
@@ -54,11 +55,13 @@ export const updateResponseFail = (error) => {
   };
 };
 
-export const updateResponse = (responseId, updateData) => {
+export const updateResponse = (responseId, updateData, userId) => {
   return dispatch => {
     axios.put('/quizresponses/' + responseId, updateData)
       .then(response => {
         dispatch(updateResponseSuccess(response.data.quizResponse));
+        //if we updated resultsViewed, get user data and update balance to reflect any winnings
+        dispatch(actions.getUserData(userId))
       })
       .catch(error => {
         dispatch(updateResponseFail(error.response.data.error));

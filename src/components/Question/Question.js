@@ -1,11 +1,9 @@
 import React from 'react';
-import Button from '../UI/Button/Button';
 import Answer from './Answer/Answer';
 import classes from './Question.module.css';
 
 const Question = props => {
   const answerOptions = props.answerOptions.map((answer, index) => {
-    console.log()
     return <Answer
       key={index}
       index={index}
@@ -19,6 +17,7 @@ const Question = props => {
 
   const styles = [classes.Question]
   if (props.answerIndex !== null && props.answerIndex !== undefined) {
+    styles.push(classes.Scored);
     styles.push(props.selectedAnswer === props.answerIndex ? classes.Correct : classes.Incorrect);
   }
 
