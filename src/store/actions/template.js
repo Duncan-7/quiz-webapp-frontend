@@ -91,10 +91,10 @@ export const fetchTemplatesFail = error => {
   };
 };
 
-export const fetchTemplates = (isAdmin) => {
+export const fetchTemplates = () => {
   return dispatch => {
     dispatch(fetchTemplatesStart());
-    const url = isAdmin ? '/quiztemplates' : '/quiztemplates/live';
+    const url = '/quiztemplates';
     axios.get(url)
       .then(response => {
         dispatch(fetchTemplatesSuccess(response.data.quizTemplates));
