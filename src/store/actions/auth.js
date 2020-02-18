@@ -114,7 +114,6 @@ export const getUserData = (userId) => {
   return dispatch => {
     axios.get('/users/' + userId)
       .then(response => {
-        console.log(response.data);
         dispatch(updateBalance(response.data.balance));
       })
       .catch(err => {

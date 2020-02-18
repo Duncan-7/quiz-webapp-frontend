@@ -12,6 +12,7 @@ const NavigationBar = (props) => {
       {props.isAdmin ? <NavigationLink link="/create-quiz">Create New Quiz</NavigationLink> : null}
       <NavigationLink link="/select-quiz">Select Quiz</NavigationLink>
       <NavigationLink link="/view-tickets">View Tickets</NavigationLink>
+      <NavigationLink link="/fourdoors">Play Fourdoors</NavigationLink>
       <NavigationLink link="/user-profile">User Profile</NavigationLink>
       <NavigationLink link="/logout">Logout</NavigationLink>
     </ul>
