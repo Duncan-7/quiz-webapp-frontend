@@ -12,6 +12,7 @@ import thunk from 'redux-thunk';
 import authReducer from './store/reducers/auth';
 import templateReducer from './store/reducers/template';
 import responseReducer from './store/reducers/response';
+import axios from './axios-instance';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
@@ -24,6 +25,15 @@ const rootReducer = combineReducers({
 const store = createStore(rootReducer, composeEnhancers(
   applyMiddleware(thunk)
 ));
+
+const JWTtoken = localStorage.getItem('token');
+
+axios.interceptors.request.use(config => {
+  config.headers.authorization = JWTtoken;
+  return config;
+},
+  error => Promise.reject(error)
+);
 
 const app = (
   <Provider store={store}>
