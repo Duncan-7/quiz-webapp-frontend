@@ -75,7 +75,7 @@ export const auth = (email, password, isSignUp) => {
         dispatch(authSuccess(response.data.token, response.data.userId, response.data.admin, response.data.balance));
         dispatch(checkAuthTimeout(response.data.expiresIn));
         //preload template and response redux stores
-        dispatch(actions.fetchTemplates(response.data.admin));
+        dispatch(actions.fetchTemplates());
         dispatch(actions.fetchResponses(response.data.userId));
       })
       .catch(err => {
