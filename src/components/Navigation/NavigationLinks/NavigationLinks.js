@@ -1,13 +1,13 @@
 import React from 'react';
 import NavigationLink from './NavigationLink/NavigationLink';
-import classes from './NavigationBar.module.css';
+import classes from './NavigationLinks.module.css';
 
-const NavigationBar = (props) => {
+const NavigationLinks = (props) => {
   let authLinks = <ul className={classes.NavLinks}>
     <NavigationLink link="/" exact>Home</NavigationLink>
   </ul>
   if (props.isAuth) {
-    authLinks = <ul className={classes.NavLinks}>
+    authLinks = <ul className={classes.NavLinks} onClick={props.closer}>
       <NavigationLink link="/" exact>Home</NavigationLink>
       {props.isAdmin ? <NavigationLink link="/create-quiz">Create New Quiz</NavigationLink> : null}
       <NavigationLink link="/select-quiz">Select Quiz</NavigationLink>
@@ -24,4 +24,4 @@ const NavigationBar = (props) => {
   )
 }
 
-export default NavigationBar;
+export default NavigationLinks;
