@@ -19,7 +19,7 @@
   color: #027BCE;
 }
 
-@media (min-width: 500px) {
+@media (min-width: 800px) {
   .NavigationLink {
     margin: 0;
     display: flex;

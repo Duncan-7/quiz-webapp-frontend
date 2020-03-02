@@ -61,9 +61,9 @@ export const updateResponse = (responseId, updateData, userId) => {
       .then(response => {
         dispatch(updateResponseSuccess(response.data.quizResponse));
         //if we updated resultsViewed, get user data and update balance to reflect any winnings
-        if(updateData.resultsViewed) {
+        if (updateData.resultsViewed) {
           dispatch(actions.getUserData(userId));
-        }    
+        }
       })
       .catch(error => {
         dispatch(updateResponseFail(error.response.data.error));
