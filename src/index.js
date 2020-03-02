@@ -26,9 +26,8 @@ const store = createStore(rootReducer, composeEnhancers(
   applyMiddleware(thunk)
 ));
 
-const JWTtoken = localStorage.getItem('token');
-
 axios.interceptors.request.use(config => {
+  const JWTtoken = localStorage.getItem('token');
   config.headers.authorization = JWTtoken;
   return config;
 },
