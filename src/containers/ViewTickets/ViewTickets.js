@@ -30,22 +30,29 @@ class ViewTickets extends Component {
     });
 
     //sort tickets into correct categories
-    let archivedTickets = <p>No tickets archived</p>;
-    let pendingTickets = <p>No tickets pending. Go select a quiz to enter!</p>;
-    let settledTickets = <p>No results to view, check back later.</p>;
+    let archivedTickets = [];
+    let pendingTickets = [];
+    let settledTickets = [];
 
     tickets.forEach(ticket => {
       if (ticket.props.archived) {
-        archivedTickets = [];
         archivedTickets.push(ticket);
       } else if (ticket.props.score === null) {
-        pendingTickets = [];
         pendingTickets.push(ticket);
       } else {
-        settledTickets = [];
         settledTickets.push(ticket);
       }
-    })
+    });
+    //if section is empty replace array with placeholder text
+    if (archivedTickets.length === 0) {
+      archivedTickets = <p>No tickets archived</p>;
+    };
+    if (pendingTickets.length === 0) {
+      pendingTickets = <p>No tickets pending. Go select a quiz to enter!</p>;
+    };
+    if (settledTickets.length === 0) {
+      settledTickets = <p>No results to view, check back later.</p>;
+    };
 
     let archived = null;
     if (this.state.showArchived) {
